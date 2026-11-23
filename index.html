@@ -1,0 +1,712 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Dropdown Components</title>
+
+<!-- Icons -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+/* ===== GLOBAL STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #080c16;
+  --card: #111827;
+  --gold: #e7bd68;
+  --text: #f4f5f9;
+  --muted: #929bad;
+  --border: rgba(255,255,255,.10);
+}
+
+body {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background:
+    radial-gradient(ellipse at top left, #20203a 0%, transparent 40%),
+    var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", sans-serif;
+}
+
+.container {
+  max-width: 1050px;
+  margin: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 38px;
+}
+
+.header .tag {
+  display: inline-block;
+  color: var(--gold);
+  border: 1px solid #59482c;
+  background: #1e1a14;
+  border-radius: 30px;
+  padding: 8px 15px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+
+.header h1 {
+  font-size: clamp(30px, 5vw, 48px);
+  letter-spacing: -1.5px;
+  margin-bottom: 12px;
+}
+
+.header h1 span {
+  color: var(--gold);
+}
+
+.header p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ===== COMPONENT GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.panel {
+  padding: 27px;
+  border: 1px solid var(--border);
+  background: linear-gradient(145deg, #151d2c, #0d1320);
+  border-radius: 22px;
+  box-shadow: 0 15px 45px #00000020;
+  transition: transform .3s, border-color .3s;
+}
+
+.panel:hover {
+  transform: translateY(-3px);
+  border-color: #8b713d;
+}
+
+.panel h2 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.panel .description {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #d8dce5;
+  font-weight: 600;
+}
+
+/* ===== CUSTOM DROPDOWN ===== */
+.dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  color: var(--text);
+  background: #0a101c;
+  border: 1px solid #30394a;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: left;
+  transition: .25s;
+}
+
+.dropdown-toggle:hover,
+.dropdown.open .dropdown-toggle {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px #e7bd6814;
+}
+
+.dropdown-toggle .left {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.dropdown-toggle .left i {
+  color: var(--gold);
+  width: 18px;
+  text-align: center;
+}
+
+.dropdown-toggle .selected-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.dropdown-toggle .chevron {
+  color: var(--muted);
+  transition: transform .25s;
+}
+
+.dropdown.open .chevron {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 7px;
+  background: #111827;
+  border: 1px solid #343e50;
+  border-radius: 14px;
+  box-shadow: 0 18px 45px #0008;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px) scale(.98);
+  transform-origin: top;
+  transition: opacity .2s, transform .2s, visibility .2s;
+}
+
+.dropdown.open .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  color: #dce2ec;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.dropdown-option:hover {
+  background: #222d40;
+  color: var(--gold);
+}
+
+.dropdown-option.active {
+  background: #e7bd6812;
+  color: var(--gold);
+}
+
+.dropdown-option .option-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  background: #202a3b;
+  border-radius: 8px;
+}
+
+.dropdown-option .check {
+  margin-left: auto;
+  color: var(--gold);
+  opacity: 0;
+}
+
+.dropdown-option.active .check {
+  opacity: 1;
+}
+
+/* ===== SEARCH FIELD ===== */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: #0a101c;
+  border: 1px solid #30394a;
+  border-radius: 9px;
+  color: var(--muted);
+}
+
+.search-box input {
+  width: 100%;
+  min-width: 0;
+  color: white;
+  outline: none;
+  border: 0;
+  background: transparent;
+  font-size: 13px;
+}
+
+.no-results {
+  display: none;
+  padding: 15px 10px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ===== NATIVE SELECT ===== */
+.native-select {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 14px;
+  color: white;
+  background: #0a101c;
+  border: 1px solid #30394a;
+  border-radius: 12px;
+  outline: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.native-select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px #e7bd6814;
+}
+
+.native-select option {
+  background: #111827;
+  color: white;
+}
+
+/* ===== MULTI-SELECT ===== */
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.selected-tag {
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #e7bd6818;
+  border: 1px solid #8b713d66;
+  color: var(--gold);
+  font-size: 12px;
+}
+
+/* ===== STATUS & BUTTON ===== */
+.status {
+  margin-top: 16px;
+  padding: 12px 14px;
+  color: #b8c2d5;
+  background: #080e19;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.status strong {
+  color: var(--gold);
+}
+
+.demo-button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 13px;
+  color: #17130c;
+  background: linear-gradient(135deg, #f1d58e, #c99b43);
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.demo-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px #e7bd6828;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 30px;
+  color: #687286;
+  font-size: 12px;
+}
+
+@media (max-width: 680px) {
+  body { padding: 28px 14px; }
+  .grid { grid-template-columns: 1fr; }
+  .panel { padding: 21px; }
+}
+</style>
+</head>
+
+<body>
+<main class="container">
+
+  <header class="header">
+    <div class="tag">
+      <i class="fa-solid fa-gem"></i> PREMIUM UI COMPONENTS
+    </div>
+    <h1>Professional <span>Dropdowns</span></h1>
+    <p>Modern, elegant and interactive dropdown components<br>
+       designed for professional dashboards.</p>
+  </header>
+
+  <section class="grid">
+
+    <!-- 1. Standard custom dropdown -->
+    <article class="panel">
+      <h2><i class="fa-solid fa-layer-group"></i> Custom Dropdown</h2>
+      <p class="description">Elegant menu with icons and animated selection.</p>
+
+      <label class="field-label">Select your department</label>
+
+      <div class="dropdown" data-dropdown id="departmentDropdown">
+        <button class="dropdown-toggle" type="button"
+                aria-expanded="false">
+          <span class="left">
+            <i class="fa-solid fa-building"></i>
+            <span class="selected-text">Choose department</span>
+          </span>
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </button>
+
+        <div class="dropdown-menu">
+          <button class="dropdown-option" type="button" data-value="Design">
+            <span class="option-icon"><i class="fa-solid fa-pen-nib"></i></span>
+            Design
+            <i class="fa-solid fa-check check"></i>
+          </button>
+          <button class="dropdown-option" type="button" data-value="Development">
+            <span class="option-icon"><i class="fa-solid fa-code"></i></span>
+            Development
+            <i class="fa-solid fa-check check"></i>
+          </button>
+          <button class="dropdown-option" type="button" data-value="Marketing">
+            <span class="option-icon"><i class="fa-solid fa-bullhorn"></i></span>
+            Marketing
+            <i class="fa-solid fa-check check"></i>
+          </button>
+          <button class="dropdown-option" type="button" data-value="Education">
+            <span class="option-icon"><i class="fa-solid fa-graduation-cap"></i></span>
+            Education
+            <i class="fa-solid fa-check check"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="status" id="departmentStatus">
+        Selected: <strong>None</strong>
+      </div>
+    </article>
+
+    <!-- 2. Searchable dropdown -->
+    <article class="panel">
+      <h2><i class="fa-solid fa-magnifying-glass"></i> Searchable Dropdown</h2>
+      <p class="description">Search and filter options instantly as you type.</p>
+
+      <label class="field-label">Select a course</label>
+
+      <div class="dropdown" data-dropdown id="courseDropdown">
+        <button class="dropdown-toggle" type="button"
+                aria-expanded="false">
+          <span class="left">
+            <i class="fa-solid fa-book-open"></i>
+            <span class="selected-text">Search courses...</span>
+          </span>
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </button>
+
+        <div class="dropdown-menu">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Type to search..."
+                   aria-label="Search courses">
+          </div>
+
+          <div class="options-list">
+            <button class="dropdown-option" type="button" data-value="Web Development">
+              <span class="option-icon"><i class="fa-solid fa-code"></i></span>
+              Web Development
+              <i class="fa-solid fa-check check"></i>
+            </button>
+            <button class="dropdown-option" type="button" data-value="Graphic Design">
+              <span class="option-icon"><i class="fa-solid fa-palette"></i></span>
+              Graphic Design
+              <i class="fa-solid fa-check check"></i>
+            </button>
+            <button class="dropdown-option" type="button" data-value="Artificial Intelligence">
+              <span class="option-icon"><i class="fa-solid fa-brain"></i></span>
+              Artificial Intelligence
+              <i class="fa-solid fa-check check"></i>
+            </button>
+            <button class="dropdown-option" type="button" data-value="Digital Marketing">
+              <span class="option-icon"><i class="fa-solid fa-chart-line"></i></span>
+              Digital Marketing
+              <i class="fa-solid fa-check check"></i>
+            </button>
+          </div>
+
+          <div class="no-results">No matching courses found.</div>
+        </div>
+      </div>
+
+      <div class="status" id="courseStatus">
+        Selected: <strong>None</strong>
+      </div>
+    </article>
+
+    <!-- 3. Native select -->
+    <article class="panel">
+      <h2><i class="fa-solid fa-sliders"></i> Native Select</h2>
+      <p class="description">A lightweight, accessible dropdown using the browser's built-in control.</p>
+
+      <label class="field-label" for="countrySelect">Select a country</label>
+
+      <select class="native-select" id="countrySelect">
+        <option value="">Choose a country</option>
+        <option value="Pakistan">Pakistan</option>
+        <option value="United Arab Emirates">United Arab Emirates</option>
+        <option value="United Kingdom">United Kingdom</option>
+        <option value="United States">United States</option>
+        <option value="Canada">Canada</option>
+        <option value="Australia">Australia</option>
+      </select>
+
+      <div class="status" id="countryStatus">
+        Selected: <strong>None</strong>
+      </div>
+    </article>
+
+    <!-- 4. Multi-select dropdown -->
+    <article class="panel">
+      <h2><i class="fa-solid fa-list-check"></i> Multi-Select</h2>
+      <p class="description">Choose multiple skills from the same dropdown.</p>
+
+      <label class="field-label">Select your skills</label>
+
+      <div class="dropdown" data-dropdown id="skillsDropdown">
+        <button class="dropdown-toggle" type="button"
+                aria-expanded="false">
+          <span class="left">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span class="selected-text">Choose skills</span>
+          </span>
+          <i class="fa-solid fa-chevron-down chevron"></i>
+        </button>
+
+        <div class="dropdown-menu">
+          <button class="dropdown-option" type="button" data-value="HTML">
+            <span class="option-icon"><i class="fa-brands fa-html5"></i></span>
+            HTML
+            <i class="fa-solid fa-check check"></i>
+          </button>
+          <button class="dropdown-option" type="button" data-value="CSS">
+            <span class="option-icon"><i class="fa-brands fa-css3-alt"></i></span>
+            CSS
+            <i class="fa-solid fa-check check"></i>
+          </button>
+          <button class="dropdown-option" type="button" data-value="JavaScript">
+            <span class="option-icon"><i class="fa-brands fa-js"></i></span>
+            JavaScript
+            <i class="fa-solid fa-check check"></i>
+          </button>
+          <button class="dropdown-option" type="button" data-value="UI/UX Design">
+            <span class="option-icon"><i class="fa-solid fa-pen-ruler"></i></span>
+            UI/UX Design
+            <i class="fa-solid fa-check check"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="selected-tags" id="skillTags"></div>
+      <div class="status" id="skillsStatus">0 skills selected.</div>
+    </article>
+
+  </section>
+
+  <div class="footer">
+    <i class="fa-solid fa-shield-halved"></i>
+    Modern UI · Responsive Layout · Smooth Animations
+  </div>
+
+</main>
+
+<script>
+/* ===== DROPDOWN CONTROLS ===== */
+const dropdowns = [...document.querySelectorAll("[data-dropdown]")];
+
+/* Close all menus except the selected one. */
+function closeDropdowns(except = null) {
+  dropdowns.forEach(dropdown => {
+    if (dropdown !== except) {
+      dropdown.classList.remove("open");
+      dropdown.querySelector(".dropdown-toggle")
+        .setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
+/* Open/close each custom dropdown. */
+dropdowns.forEach(dropdown => {
+  const toggle = dropdown.querySelector(".dropdown-toggle");
+
+  toggle.addEventListener("click", () => {
+    const shouldOpen = !dropdown.classList.contains("open");
+    closeDropdowns(dropdown);
+    dropdown.classList.toggle("open", shouldOpen);
+    toggle.setAttribute("aria-expanded", String(shouldOpen));
+
+    if (shouldOpen) {
+      const search = dropdown.querySelector(".search-box input");
+      if (search) search.focus();
+    }
+  });
+
+  /* Searchable dropdown filtering. */
+  const searchInput = dropdown.querySelector(".search-box input");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.toLowerCase().trim();
+      const options = dropdown.querySelectorAll(".dropdown-option");
+      let visibleCount = 0;
+
+      options.forEach(option => {
+        const matches = option.textContent.toLowerCase().includes(query);
+        option.style.display = matches ? "flex" : "none";
+        if (matches) visibleCount++;
+      });
+
+      dropdown.querySelector(".no-results").style.display =
+        visibleCount ? "none" : "block";
+    });
+  }
+});
+
+/* ===== SINGLE-SELECT COMPONENTS ===== */
+function setupSingleSelect(dropdownId, statusId, defaultIcon) {
+  const dropdown = document.getElementById(dropdownId);
+  const status = document.getElementById(statusId);
+  const selectedText = dropdown.querySelector(".selected-text");
+  const options = dropdown.querySelectorAll(".dropdown-option");
+
+  options.forEach(option => {
+    option.addEventListener("click", () => {
+      options.forEach(item => item.classList.remove("active"));
+      option.classList.add("active");
+
+      const value = option.dataset.value;
+      selectedText.textContent = value;
+      status.innerHTML = `Selected: <strong>${value}</strong>`;
+
+      /* Update the main dropdown icon when selecting an option. */
+      const optionIcon = option.querySelector(".option-icon i");
+      const mainIcon = dropdown.querySelector(".dropdown-toggle .left > i");
+
+      if (optionIcon && mainIcon) {
+        mainIcon.className = optionIcon.className;
+      }
+
+      closeDropdowns();
+    });
+  });
+}
+
+setupSingleSelect("departmentDropdown", "departmentStatus");
+setupSingleSelect("courseDropdown", "courseStatus");
+
+/* ===== NATIVE SELECT ===== */
+const countrySelect = document.getElementById("countrySelect");
+const countryStatus = document.getElementById("countryStatus");
+
+countrySelect.addEventListener("change", () => {
+  const value = countrySelect.value;
+  countryStatus.innerHTML = value
+    ? `Selected: <strong>${value}</strong>`
+    : "Selected: <strong>None</strong>";
+});
+
+/* ===== MULTI-SELECT COMPONENT ===== */
+const skillsDropdown = document.getElementById("skillsDropdown");
+const skillsOptions = skillsDropdown.querySelectorAll(".dropdown-option");
+const skillsText = skillsDropdown.querySelector(".selected-text");
+const skillsStatus = document.getElementById("skillsStatus");
+const skillTags = document.getElementById("skillTags");
+const selectedSkills = new Set();
+
+skillsOptions.forEach(option => {
+  option.addEventListener("click", () => {
+    const skill = option.dataset.value;
+
+    if (selectedSkills.has(skill)) {
+      selectedSkills.delete(skill);
+      option.classList.remove("active");
+    } else {
+      selectedSkills.add(skill);
+      option.classList.add("active");
+    }
+
+    updateSkills();
+  });
+});
+
+function updateSkills() {
+  const skills = [...selectedSkills];
+
+  skillsText.textContent = skills.length
+    ? `${skills.length} skill${skills.length > 1 ? "s" : ""} selected`
+    : "Choose skills";
+
+  skillsStatus.textContent =
+    `${skills.length} skill${skills.length === 1 ? "" : "s"} selected.`;
+
+  skillTags.replaceChildren();
+
+  skills.forEach(skill => {
+    const tag = document.createElement("span");
+    tag.className = "selected-tag";
+    tag.textContent = skill;
+    skillTags.appendChild(tag);
+  });
+}
+
+/* ===== OUTSIDE CLICK & KEYBOARD ===== */
+document.addEventListener("click", event => {
+  if (!event.target.closest("[data-dropdown]")) {
+    closeDropdowns();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeDropdowns();
+  }
+});
+</script>
+</body>
+</html>
